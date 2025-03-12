@@ -7,6 +7,8 @@ const passUserToView = (req, res, next) => {
     next(); //call the next piece of middleware
 }
 
+module.exports = passUserToView;
+
 ///this is how to write the same thing as an if/else statement
 // if(req.session.user) {
 //     res.locals.user = req.session.user { 
