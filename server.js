@@ -8,6 +8,8 @@ const morgan = require('morgan');
 const session = require('express-session');
 
 const authController = require('./controllers/auth.js');
+const isSignedIn = require('./middleware/is-signed-in.js');
+const passUserToView = require('./middleware/pass-user-to-view.js');
 
 const port = process.env.PORT ? process.env.PORT : '3000';
 
@@ -28,6 +30,10 @@ app.use(
   })
 );
 
+//passUserToView after session middleware, but before homepage
+app.use(passUserToView);
+
+
 app.get('/', (req, res) => {
   res.render('index.ejs', {
     user: req.session.user,
@@ -35,6 +41,8 @@ app.get('/', (req, res) => {
 });
 
 app.use('/auth', authController);
+
+app.use(isSignedIn); //this middleware runs after auth routes - the user needs to authenticate first
 
 app.listen(port, () => {
   console.log(`The express app is ready on port ${port}!`);
